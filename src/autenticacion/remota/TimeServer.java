@@ -12,12 +12,7 @@ package autenticacion.remota;
 import java.io.*;
 import java.net.*;
 import java.util.Date;
- 
-/**
- * This program demonstrates a simple TCP/IP socket server.
- *
- * @author www.codejava.net
- */
+
 public class TimeServer {
  
     public static void main(String[] args) {
