@@ -17,16 +17,20 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.InetAddress;
 import java.net.Socket;
+import java.util.LinkedList;
+import java.util.Queue;
  
 public class Client
 {
  
     private static Socket socket;
+    private static Queue<String> credentials = new LinkedList<>(); 
  
     public static void main(String args[])
     {
         try
         {
+            System.out.println(credentials.size());
             String host = "localhost";
             int port = 25000;
             InetAddress address = InetAddress.getByName(host);

@@ -236,7 +236,7 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
         Usuario user = new Usuario(UUID.randomUUID(),tf_primer_nombre.getText(),tf_segundo_nombre.getText(),tf_username.getText(),encrypt(tf_regpassword.getText()), date);
-        Document document = new Document("UUID", user.getUuid())
+        Document document = new Document("User", user.getUuid())
                 .append("nombre",user.getPrimer_nombre()+" "+user.getSegundo_nombre())
                 .append("username", user.getUsername())
                 .append("password", user.getPassword())
@@ -266,7 +266,7 @@ public class Login extends javax.swing.JFrame {
         if (doc == null) {
                 JOptionPane.showMessageDialog(this, "El usuario y/o contrasena no es correcto");
         }else if (doc.get("username").equals(tf_user.getText()) && doc.get("password").equals(encrypt(tf_password.getText()))) {
-                JOptionPane.showMessageDialog(this, "Login Exitoso");
+                JOptionPane.showMessageDialog(this, "Bienvenido "+ doc.get("UUID"));
         }
    
         tf_user.setText("");
