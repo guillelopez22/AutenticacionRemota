@@ -5,6 +5,20 @@
  */
 package autenticacion.remota;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.UUID;
+import org.bson.Document;
 /**
  *
  * @author Guillermo
@@ -16,6 +30,9 @@ public class Login extends javax.swing.JFrame {
      */
     public Login() {
         initComponents();
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        jd_register.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
+        
     }
 
     /**
@@ -27,7 +44,7 @@ public class Login extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jg_register = new javax.swing.JDialog();
+        jd_register = new javax.swing.JDialog();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -58,67 +75,72 @@ public class Login extends javax.swing.JFrame {
         jLabel8.setText("Password: ");
 
         jButton3.setText("Accept");
+        jButton3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton3MouseClicked(evt);
+            }
+        });
 
         jButton4.setText("Cancel");
 
-        javax.swing.GroupLayout jg_registerLayout = new javax.swing.GroupLayout(jg_register.getContentPane());
-        jg_register.getContentPane().setLayout(jg_registerLayout);
-        jg_registerLayout.setHorizontalGroup(
-            jg_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jg_registerLayout.createSequentialGroup()
-                .addGroup(jg_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jg_registerLayout.createSequentialGroup()
+        javax.swing.GroupLayout jd_registerLayout = new javax.swing.GroupLayout(jd_register.getContentPane());
+        jd_register.getContentPane().setLayout(jd_registerLayout);
+        jd_registerLayout.setHorizontalGroup(
+            jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jd_registerLayout.createSequentialGroup()
+                .addGroup(jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jd_registerLayout.createSequentialGroup()
                         .addGap(24, 24, 24)
                         .addComponent(jLabel5)
                         .addGap(18, 18, 18)
                         .addComponent(tf_primer_nombre))
-                    .addGroup(jg_registerLayout.createSequentialGroup()
-                        .addGroup(jg_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jg_registerLayout.createSequentialGroup()
+                    .addGroup(jd_registerLayout.createSequentialGroup()
+                        .addGroup(jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jd_registerLayout.createSequentialGroup()
                                 .addGap(143, 143, 143)
                                 .addComponent(jLabel4))
-                            .addGroup(jg_registerLayout.createSequentialGroup()
+                            .addGroup(jd_registerLayout.createSequentialGroup()
                                 .addGap(128, 128, 128)
                                 .addComponent(jButton3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton4)))
                         .addGap(0, 70, Short.MAX_VALUE))
-                    .addGroup(jg_registerLayout.createSequentialGroup()
+                    .addGroup(jd_registerLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jg_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                        .addGroup(jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel7)
                             .addComponent(jLabel6)
                             .addComponent(jLabel8))
                         .addGap(18, 18, 18)
-                        .addGroup(jg_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(tf_segundo_nombre)
                             .addComponent(tf_username)
                             .addComponent(tf_regpassword))))
                 .addContainerGap())
         );
-        jg_registerLayout.setVerticalGroup(
-            jg_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jg_registerLayout.createSequentialGroup()
+        jd_registerLayout.setVerticalGroup(
+            jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jd_registerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel4)
                 .addGap(24, 24, 24)
-                .addGroup(jg_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(tf_primer_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jg_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel6)
                     .addComponent(tf_segundo_nombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jg_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(tf_username, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jg_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(tf_regpassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(jg_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
                     .addComponent(jButton4))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -135,6 +157,11 @@ public class Login extends javax.swing.JFrame {
         jButton1.setText("Sign In");
 
         jButton2.setText("Register...");
+        jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton2MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -182,8 +209,31 @@ public class Login extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton2MouseClicked
+        // TODO add your handling code here:      
+        jd_register.setModal(true);
+        jd_register.pack();
+        jd_register.setVisible(true);
+    }//GEN-LAST:event_jButton2MouseClicked
+
+    private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
+        // TODO add your handling code here:
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+	LocalDate localDate = LocalDate.now();
+        String date = new SimpleDateFormat("dd-MM-yyyy").format(localDate);
+        Usuario user = new Usuario(UUID.randomUUID(),tf_primer_nombre.getText(),tf_segundo_nombre.getText(),tf_username.getText(),encrypt(tf_regpassword.getText()), date);
+        Document document = new Document("UUID", user.getUuid())
+                .append("nombre",user.getPrimer_nombre()+" "+user.getSegundo_nombre())
+                .append("username", user.getUsername())
+                .append("password", user.getPassword())
+                .append("fecha_creacion", user.getFecha_creacion())
+                .append("ultimo acceso", "N/A");
+        users.insertOne(document);
+    }//GEN-LAST:event_jButton3MouseClicked
+    
     /**
      * @param args the command line arguments
      */
@@ -210,7 +260,7 @@ public class Login extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -218,7 +268,25 @@ public class Login extends javax.swing.JFrame {
             }
         });
     }
+public static String encrypt(String pass){
+    MessageDigest md;
+    try {
+        md = MessageDigest.getInstance("MD5");
+        byte[] passBytes = pass.getBytes();
+        md.reset();
+        byte[] digested = md.digest(passBytes);
+        StringBuffer sb = new StringBuffer();
+        for(int i=0;i<digested.length;i++){
+            sb.append(Integer.toHexString(0xff & digested[i]));
+        }
+        return sb.toString();
+    } catch (NoSuchAlgorithmException ex) {
+        ex.printStackTrace();
+    }
+        return null;
 
+
+   }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -232,7 +300,7 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
-    private javax.swing.JDialog jg_register;
+    private javax.swing.JDialog jd_register;
     private javax.swing.JPasswordField tf_password;
     private javax.swing.JTextField tf_primer_nombre;
     private javax.swing.JPasswordField tf_regpassword;
@@ -240,4 +308,8 @@ public class Login extends javax.swing.JFrame {
     private javax.swing.JTextField tf_user;
     private javax.swing.JTextField tf_username;
     // End of variables declaration//GEN-END:variables
+    MongoClientURI uri  = new MongoClientURI("mongodb://admin:admin123@ds123151.mlab.com:23151/remote_auth"); 
+    MongoClient client = new MongoClient(uri);
+    MongoDatabase db = client.getDatabase(uri.getDatabase());
+    MongoCollection<Document> users = db.getCollection("users");
 }

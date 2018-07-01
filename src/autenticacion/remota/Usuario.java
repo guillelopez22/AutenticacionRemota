@@ -25,14 +25,13 @@ public class Usuario {
     public Usuario() {
     }
 
-    public Usuario(UUID uuid, String primer_nombre, String segundo_nombre, String username, String password, String fecha_creacion, ArrayList<String> fechas_acceso_servidor) {
+    public Usuario(UUID uuid, String primer_nombre, String segundo_nombre, String username, String password, String fecha_creacion) {
         this.uuid = uuid;
         this.primer_nombre = primer_nombre;
         this.segundo_nombre = segundo_nombre;
         this.username = username;
         this.password = password;
         this.fecha_creacion = fecha_creacion;
-        this.fechas_acceso_servidor = fechas_acceso_servidor;
     }
 
     public UUID getUuid() {
@@ -87,8 +86,8 @@ public class Usuario {
         return fechas_acceso_servidor;
     }
 
-    public void setFechas_acceso_servidor(ArrayList<String> fechas_acceso_servidor) {
-        this.fechas_acceso_servidor = fechas_acceso_servidor;
+    public void setFechas_acceso_servidor(String fecha_acceso_servidor) {
+        this.fechas_acceso_servidor.add(fecha_acceso_servidor);
     }
 
     @Override
