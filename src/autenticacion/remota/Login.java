@@ -266,12 +266,9 @@ public class Login extends javax.swing.JFrame {
         if (doc == null) {
                 JOptionPane.showMessageDialog(this, "El usuario y/o contrasena no es correcto");
         }else if (doc.get("username").equals(tf_user.getText()) && doc.get("password").equals(encrypt(tf_password.getText()))) {
-                
                 JOptionPane.showMessageDialog(this, "Login Exitoso");
         }
-
-
-        
+   
         tf_user.setText("");
         tf_password.setText("");
         
