@@ -4,13 +4,14 @@ Si el cliente recibe el UUID del coordinador, entonces se pasa a la ventana de u
 no se queda en la ventana de autenticación.
 Ventana de usuarios
 Presenta una tabla de todos los usuarios registrados en el sistema con la siguiente
-        
-        información:
-          1. Nombre Completo
-          2. LoginName
-          3. Fecha de creación
-          4. Fecha de accesos al sistema
+               
+               información:
+                    1. Nombre Completo
+                    2. LoginName
+                    3. Fecha de creación
+                    4. Fecha de accesos al sistema
  
+                                
                                 App Coordinador
 Recibe los requests de autenticación de los clientes y lo redirecciona a un servidor de
 autenticación para obtener el respectivo UUID si este lo tiene. La elección del servidor lo
