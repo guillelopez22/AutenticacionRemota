@@ -9,15 +9,18 @@ import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.UUID;
+import javax.swing.JOptionPane;
 import org.bson.Document;
 /**
  *
@@ -82,6 +85,11 @@ public class Login extends javax.swing.JFrame {
         });
 
         jButton4.setText("Cancel");
+        jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton4MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout jd_registerLayout = new javax.swing.GroupLayout(jd_register.getContentPane());
         jd_register.getContentPane().setLayout(jd_registerLayout);
@@ -155,6 +163,11 @@ public class Login extends javax.swing.JFrame {
         jLabel3.setText("Password:");
 
         jButton1.setText("Sign In");
+        jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton1MouseClicked(evt);
+            }
+        });
 
         jButton2.setText("Register...");
         jButton2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -221,18 +234,48 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         // TODO add your handling code here:
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
-	LocalDate localDate = LocalDate.now();
-        String date = new SimpleDateFormat("dd-MM-yyyy").format(localDate);
+        String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
         Usuario user = new Usuario(UUID.randomUUID(),tf_primer_nombre.getText(),tf_segundo_nombre.getText(),tf_username.getText(),encrypt(tf_regpassword.getText()), date);
         Document document = new Document("UUID", user.getUuid())
                 .append("nombre",user.getPrimer_nombre()+" "+user.getSegundo_nombre())
                 .append("username", user.getUsername())
                 .append("password", user.getPassword())
-                .append("fecha_creacion", user.getFecha_creacion())
+                .append("fecha_creacion", date.toString())
                 .append("ultimo acceso", "N/A");
         users.insertOne(document);
     }//GEN-LAST:event_jButton3MouseClicked
+
+    private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
+        // TODO add your handling code here:
+        jd_register.dispose();
+    }//GEN-LAST:event_jButton4MouseClicked
+
+    private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
+        // TODO add your handling code here:
+        BasicDBObject andQuery = new BasicDBObject();
+	List<BasicDBObject> obj = new ArrayList<BasicDBObject>();
+	obj.add(new BasicDBObject("username", "memoln"));
+	obj.add(new BasicDBObject("password", encrypt(tf_password.getText())));
+	andQuery.put("$and", obj);
+
+	MongoCursor<Document> cursor = users.find(andQuery).iterator();
+        Document doc = null;
+	while (cursor.hasNext()) {
+            doc = cursor.next();
+	}
+        if (doc == null) {
+                JOptionPane.showMessageDialog(this, "El usuario y/o contrasena no es correcto");
+        }else if (doc.get("username").equals(tf_user.getText()) && doc.get("password").equals(encrypt(tf_password.getText()))) {
+                
+                JOptionPane.showMessageDialog(this, "Login Exitoso");
+        }
+
+
+        
+        tf_user.setText("");
+        tf_password.setText("");
+        
+    }//GEN-LAST:event_jButton1MouseClicked
     
     /**
      * @param args the command line arguments
