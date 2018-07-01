@@ -4,6 +4,7 @@ Si el cliente recibe el UUID del coordinador, entonces se pasa a la ventana de u
 no se queda en la ventana de autenticación.
 Ventana de usuarios
 Presenta una tabla de todos los usuarios registrados en el sistema con la siguiente
+        
         información:
           1. Nombre Completo
           2. LoginName
