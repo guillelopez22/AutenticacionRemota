@@ -18,7 +18,7 @@ pueda hacer roundrobin.
 Procesa los requests del coordinador y envía la respuesta correspondiente. Guarda la
 información de los usuarios en una base de datos.
 
-Interfaz del cliente
+                                Interfaz del cliente
 1. loginRequest(loginName, password): retorna UUID si tiene asignado el loginName,
 sino retorna error.
 2. createUser(nombreCompleto, loginName, password): no retorna
