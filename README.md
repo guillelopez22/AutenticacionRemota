@@ -1,4 +1,4 @@
-                               App Cliente
+-                               App Cliente
 Ventana de autenticación: Pide login y password
 Si el cliente recibe el UUID del coordinador, entonces se pasa a la ventana de usuarios. Si
 no se queda en la ventana de autenticación.
@@ -20,7 +20,7 @@ pueda hacer roundrobin.
 Procesa los requests del coordinador y envía la respuesta correspondiente. Guarda la
 información de los usuarios en una base de datos.
 
-                                Interfaz del cliente
+-                                Interfaz del cliente
 1. loginRequest(loginName, password): retorna UUID si tiene asignado el loginName,
 sino retorna error.
 2. createUser(nombreCompleto, loginName, password): no retorna
