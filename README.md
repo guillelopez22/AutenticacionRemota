@@ -11,7 +11,7 @@ Presenta una tabla de todos los usuarios registrados en el sistema con la siguie
                     3. Fecha de creación
                     4. Fecha de accesos al sistema
  
-                                
+-                                
                                 App Coordinador
 Recibe los requests de autenticación de los clientes y lo redirecciona a un servidor de
 autenticación para obtener el respectivo UUID si este lo tiene. La elección del servidor lo
