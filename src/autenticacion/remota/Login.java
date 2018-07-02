@@ -8,7 +8,10 @@ package autenticacion.remota;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.security.MessageDigest;
@@ -18,7 +21,9 @@ import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import org.bson.Document;
+
 /**
  *
  * @author Guillermo
@@ -31,8 +36,8 @@ public class Login extends javax.swing.JFrame {
     public Login() {
         initComponents();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
-        jd_register.setLocation(dim.width/2-this.getSize().width/2, dim.height/2-this.getSize().height/2);
-        
+        jd_register.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+
     }
 
     /**
@@ -56,6 +61,20 @@ public class Login extends javax.swing.JFrame {
         tf_segundo_nombre = new javax.swing.JTextField();
         tf_username = new javax.swing.JTextField();
         tf_regpassword = new javax.swing.JPasswordField();
+        jd_clente = new javax.swing.JDialog();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jt_users = new javax.swing.JTable();
+        jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
+        jd_lookup = new javax.swing.JDialog();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
+        tf_UUID = new javax.swing.JTextField();
+        tf_USER = new javax.swing.JTextField();
+        jButton8 = new javax.swing.JButton();
+        jButton9 = new javax.swing.JButton();
+        jLabel11 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -152,6 +171,125 @@ public class Login extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        jt_users.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jt_users);
+
+        jButton5.setText("Lookup");
+        jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton5MouseClicked(evt);
+            }
+        });
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
+
+        jButton6.setText("Delete User");
+
+        jButton7.setText("Update User");
+
+        javax.swing.GroupLayout jd_clenteLayout = new javax.swing.GroupLayout(jd_clente.getContentPane());
+        jd_clente.getContentPane().setLayout(jd_clenteLayout);
+        jd_clenteLayout.setHorizontalGroup(
+            jd_clenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jd_clenteLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jd_clenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1)
+                    .addGroup(jd_clenteLayout.createSequentialGroup()
+                        .addComponent(jButton5)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton6)
+                        .addGap(18, 18, 18)
+                        .addComponent(jButton7)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jd_clenteLayout.setVerticalGroup(
+            jd_clenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jd_clenteLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 275, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jd_clenteLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton5)
+                    .addComponent(jButton6)
+                    .addComponent(jButton7))
+                .addContainerGap(89, Short.MAX_VALUE))
+        );
+
+        jLabel9.setText("UUID: ");
+
+        jLabel10.setText("Username: ");
+
+        jButton8.setText("SND");
+        jButton8.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton8MouseClicked(evt);
+            }
+        });
+
+        jButton9.setText("SND");
+        jButton9.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButton9MouseClicked(evt);
+            }
+        });
+
+        jLabel11.setText("LOOKUP");
+
+        javax.swing.GroupLayout jd_lookupLayout = new javax.swing.GroupLayout(jd_lookup.getContentPane());
+        jd_lookup.getContentPane().setLayout(jd_lookupLayout);
+        jd_lookupLayout.setHorizontalGroup(
+            jd_lookupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jd_lookupLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jd_lookupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel9)
+                    .addComponent(jLabel10))
+                .addGap(18, 18, 18)
+                .addGroup(jd_lookupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(tf_UUID)
+                    .addComponent(tf_USER, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jd_lookupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton8)
+                    .addComponent(jButton9)))
+            .addGroup(jd_lookupLayout.createSequentialGroup()
+                .addGap(136, 136, 136)
+                .addComponent(jLabel11)
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jd_lookupLayout.setVerticalGroup(
+            jd_lookupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jd_lookupLayout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addComponent(jLabel11)
+                .addGap(28, 28, 28)
+                .addGroup(jd_lookupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(tf_UUID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton8))
+                .addGap(18, 18, 18)
+                .addGroup(jd_lookupLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(tf_USER, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton9))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("User Login");
@@ -233,9 +371,9 @@ public class Login extends javax.swing.JFrame {
     private void jButton3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton3MouseClicked
         // TODO add your handling code here:
         String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-        Usuario user = new Usuario(UUID.randomUUID(),tf_primer_nombre.getText(),tf_segundo_nombre.getText(),tf_username.getText(),encrypt(tf_regpassword.getText()), date);
+        Usuario user = new Usuario(UUID.randomUUID(), tf_primer_nombre.getText(), tf_segundo_nombre.getText(), tf_username.getText(), encrypt(tf_regpassword.getText()), date);
         Document document = new Document("UUID", user.getUuid())
-                .append("nombre",user.getPrimer_nombre()+" "+user.getSegundo_nombre())
+                .append("nombre", user.getPrimer_nombre() + " " + user.getSegundo_nombre())
                 .append("username", user.getUsername())
                 .append("password", user.getPassword())
                 .append("fecha_creacion", date.toString())
@@ -257,21 +395,87 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.out.println("currently testing..");
         Random r = new Random();
-        int port = r.nextInt(25001-25000) + 25000;
+        int port = r.nextInt(25001 - 25000) + 25000;
         String[] args = new String[3];
         args[0] = Integer.toString(port);
         args[1] = tf_user.getText();
         args[2] = encrypt(tf_password.getText());
-        
+
         System.out.println(port);
-        String uuid = Coordinador.main(args);
+        String uuid = null;;
+        uuid = Coordinador.main(args);
         System.out.println(uuid);
-        
+        DefaultTableModel model = new DefaultTableModel();
+        String[] columnNames = {"Nombre", "Username", "Fecha Creacion", "FechaAcceso"};
+        for (int i = 0; i < columnNames.length; i++) {
+            model.addColumn(columnNames[i]);
+        }
+        MongoCursor<Document> cursor = users.find().iterator();
+        Document doc;
+        String nombre, username, fecha_c, fecha_a;
+        while(cursor.hasNext()){
+            doc = cursor.next();
+            nombre = (String) doc.get("nombre");
+            System.out.println(nombre);
+            username = (String) doc.get("username");
+            System.out.println(username);
+            fecha_c = (String) doc.get("fecha_creacion");
+            System.out.println(fecha_c);
+            fecha_a = (String) doc.get("ultimo acceso");
+            System.out.println(fecha_a);
+            model.addRow(new Object[]{nombre, username, fecha_c, fecha_a});
+        }
+        jt_users.setModel(model);
+        if (!uuid.equals("ERR")) {
+            jd_clente.setModal(true);
+            jd_clente.pack();
+            jd_clente.setVisible(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Las credenciales no son correctas");
+        }
         tf_user.setText("");
         tf_password.setText("");
-        
+
+
     }//GEN-LAST:event_jButton1MouseClicked
-    
+
+    private void jButton8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton8MouseClicked
+        // TODO add your handling code here:
+        
+        Document doc = users.find(eq("UUID", tf_UUID.getText())).first();
+        System.out.println(tf_UUID.getText());
+        String UUID = "ERR";
+        UUID = doc.get("UUID").toString();
+        if(!UUID.equals("ERR")){            
+            JOptionPane.showMessageDialog(this,UUID );
+        }else{
+            JOptionPane.showMessageDialog(this,"No existe UUID");
+        }
+        
+    }//GEN-LAST:event_jButton8MouseClicked
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
+        // TODO add your handling code here:
+        jd_lookup.pack();
+        jd_lookup.setModal(true);
+        jd_lookup.setVisible(true);
+    }//GEN-LAST:event_jButton5MouseClicked
+
+    private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton9MouseClicked
+        // TODO add your handling code here:
+        Document doc = users.find(eq("username", tf_USER.getText())).first();
+        System.out.println(tf_USER.getText());
+        String USER = "ERR";
+        USER = doc.get("username").toString();
+        if (!USER.equals("ERR")) {
+            JOptionPane.showMessageDialog(this, doc.get("UUID")+", "+doc.get("nombre")+", "+doc.get("username"));
+        }
+    }//GEN-LAST:event_jButton9MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -298,7 +502,7 @@ public class Login extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Login.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-        
+
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -306,31 +510,38 @@ public class Login extends javax.swing.JFrame {
             }
         });
     }
-public static String encrypt(String pass){
-    MessageDigest md;
-    try {
-        md = MessageDigest.getInstance("MD5");
-        byte[] passBytes = pass.getBytes();
-        md.reset();
-        byte[] digested = md.digest(passBytes);
-        StringBuffer sb = new StringBuffer();
-        for(int i=0;i<digested.length;i++){
-            sb.append(Integer.toHexString(0xff & digested[i]));
+
+    public static String encrypt(String pass) {
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("MD5");
+            byte[] passBytes = pass.getBytes();
+            md.reset();
+            byte[] digested = md.digest(passBytes);
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < digested.length; i++) {
+                sb.append(Integer.toHexString(0xff & digested[i]));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException ex) {
+            ex.printStackTrace();
         }
-        return sb.toString();
-    } catch (NoSuchAlgorithmException ex) {
-        ex.printStackTrace();
-    }
         return null;
 
-
-   }
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
+    private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
+    private javax.swing.JButton jButton7;
+    private javax.swing.JButton jButton8;
+    private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -338,7 +549,14 @@ public static String encrypt(String pass){
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JDialog jd_clente;
+    private javax.swing.JDialog jd_lookup;
     private javax.swing.JDialog jd_register;
+    private javax.swing.JTable jt_users;
+    private javax.swing.JTextField tf_USER;
+    private javax.swing.JTextField tf_UUID;
     private javax.swing.JPasswordField tf_password;
     private javax.swing.JTextField tf_primer_nombre;
     private javax.swing.JPasswordField tf_regpassword;
@@ -346,7 +564,7 @@ public static String encrypt(String pass){
     private javax.swing.JTextField tf_user;
     private javax.swing.JTextField tf_username;
     // End of variables declaration//GEN-END:variables
-    MongoClientURI uri  = new MongoClientURI("mongodb://admin:admin123@ds123151.mlab.com:23151/remote_auth"); 
+    MongoClientURI uri = new MongoClientURI("mongodb://admin:admin123@ds123151.mlab.com:23151/remote_auth");
     MongoClient client = new MongoClient(uri);
     MongoDatabase db = client.getDatabase(uri.getDatabase());
     MongoCollection<Document> users = db.getCollection("users");

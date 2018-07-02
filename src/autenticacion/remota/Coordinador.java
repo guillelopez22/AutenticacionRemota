@@ -32,7 +32,7 @@ import org.bson.Document;
 public class Coordinador {
 
     private static Socket socket;
-    public static String Rmessage;
+    public static String Rmessage = "ERR";
 
     public static String main(String args[]) {
         try {
@@ -58,6 +58,9 @@ public class Coordinador {
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);
             Rmessage = br.readLine();
+            if (Rmessage == null) {
+                Rmessage = "ERR";
+            }
             System.out.println("Received: "+Rmessage);
 
         } catch (Exception exception) {
