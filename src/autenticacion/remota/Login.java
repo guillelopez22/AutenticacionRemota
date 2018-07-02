@@ -98,11 +98,6 @@ public class Login extends javax.swing.JFrame {
             .addGroup(jd_registerLayout.createSequentialGroup()
                 .addGroup(jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jd_registerLayout.createSequentialGroup()
-                        .addGap(24, 24, 24)
-                        .addComponent(jLabel5)
-                        .addGap(18, 18, 18)
-                        .addComponent(tf_primer_nombre))
-                    .addGroup(jd_registerLayout.createSequentialGroup()
                         .addGroup(jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jd_registerLayout.createSequentialGroup()
                                 .addGap(143, 143, 143)
@@ -114,13 +109,19 @@ public class Login extends javax.swing.JFrame {
                                 .addComponent(jButton4)))
                         .addGap(0, 70, Short.MAX_VALUE))
                     .addGroup(jd_registerLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jLabel7)
-                            .addComponent(jLabel6)
-                            .addComponent(jLabel8))
+                        .addGroup(jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jd_registerLayout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel6)
+                                    .addComponent(jLabel8)))
+                            .addGroup(jd_registerLayout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addComponent(jLabel5)))
                         .addGap(18, 18, 18)
                         .addGroup(jd_registerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(tf_primer_nombre)
                             .addComponent(tf_segundo_nombre)
                             .addComponent(tf_username)
                             .addComponent(tf_regpassword))))
@@ -241,8 +242,13 @@ public class Login extends javax.swing.JFrame {
                 .append("username", user.getUsername())
                 .append("password", user.getPassword())
                 .append("fecha_creacion", date.toString())
-                .append("ultimo acceso", "N/A");
+                .append("ultimo acceso", date.toString());
         users.insertOne(document);
+        tf_primer_nombre.setText("");
+        tf_segundo_nombre.setText("");
+        tf_username.setText("");
+        tf_regpassword.setText("");
+        JOptionPane.showMessageDialog(this, "Usuario creado con exito");
     }//GEN-LAST:event_jButton3MouseClicked
 
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
