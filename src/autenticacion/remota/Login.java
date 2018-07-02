@@ -462,7 +462,10 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         jd_lookup.pack();
         jd_lookup.setModal(true);
+        Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        jd_lookup.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         jd_lookup.setVisible(true);
+        
     }//GEN-LAST:event_jButton5MouseClicked
 
     private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton9MouseClicked

@@ -5,15 +5,17 @@
  */
 package autenticacion.remota;
 
+import java.io.Serializable;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.UUID;
 
 /**
  *
  * @author Guillermo
  */
-public class Usuario {
+public class Usuario implements Serializable{
     private UUID uuid;
     private String primer_nombre;
     private String segundo_nombre;
@@ -25,12 +27,26 @@ public class Usuario {
     public Usuario() {
     }
 
+    public Usuario(String primer_nombre, String segundo_nombre, String username, String fecha_creacion) {
+        this.primer_nombre = primer_nombre;
+        this.segundo_nombre = segundo_nombre;
+        this.username = username;
+        this.fecha_creacion = fecha_creacion;
+    }
+
+
+
+    public Usuario(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+    
     public Usuario(UUID uuid, String primer_nombre, String segundo_nombre, String username, String password, String fecha_creacion) {
         this.uuid = uuid;
         this.primer_nombre = primer_nombre;
         this.segundo_nombre = segundo_nombre;
         this.username = username;
-        this.password = password;
+        this.password = encrypt(password);
         this.fecha_creacion = fecha_creacion;
     }
 
@@ -71,7 +87,7 @@ public class Usuario {
     }
 
     public void setPassword(String password) {
-        this.password = password;
+        this.password = encrypt(password);
     }
 
     public String getFecha_creacion() {
@@ -92,7 +108,24 @@ public class Usuario {
 
     @Override
     public String toString() {
-        return username;
+        return uuid +" "+ primer_nombre +" "+ segundo_nombre +" "+ username +" "+ fecha_creacion;
     }
-    
+    public static String encrypt(String pass) {
+        MessageDigest md;
+        try {
+            md = MessageDigest.getInstance("MD5");
+            byte[] passBytes = pass.getBytes();
+            md.reset();
+            byte[] digested = md.digest(passBytes);
+            StringBuffer sb = new StringBuffer();
+            for (int i = 0; i < digested.length; i++) {
+                sb.append(Integer.toHexString(0xff & digested[i]));
+            }
+            return sb.toString();
+        } catch (NoSuchAlgorithmException ex) {
+            ex.printStackTrace();
+        }
+        return null;
+
+    }
 }
