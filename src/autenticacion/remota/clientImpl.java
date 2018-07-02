@@ -33,17 +33,19 @@ public class clientImpl extends UnicastRemoteObject implements clientMethods {
     MongoCollection<Document> users = db.getCollection("users");
 
     @Override
-    public String auth(Usuario usuario) throws RemoteException {
+    public UUID auth(Usuario usuario) throws RemoteException {
 
-        String message = "";
+        String message = "ERR";
         Document doc = users.find(and(eq("username", usuario.getUsername()), (eq("password", usuario.getPassword())))).first();
         if (doc.get("username").equals(usuario.getUsername()) && doc.get("password").equals(usuario.getPassword())) {
             message = doc.get("UUID").toString();
         }
-
-        return message;
+        
+        return usuario.getUuid();
     }
-
+    public clientImpl() throws RemoteException{
+    
+}
     @Override
     public void registrar(Usuario usuario) throws RemoteException {
         String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
@@ -58,7 +60,7 @@ public class clientImpl extends UnicastRemoteObject implements clientMethods {
 
     @Override
     public Usuario lookUpUserUUID(UUID uuid) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return null;
     }
 
     @Override
@@ -71,7 +73,7 @@ public class clientImpl extends UnicastRemoteObject implements clientMethods {
 
     @Override
     public boolean deleteUser(Usuario usuario) throws RemoteException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return true;
     }
 
     @Override

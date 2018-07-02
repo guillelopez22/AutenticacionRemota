@@ -20,11 +20,11 @@ public class Server2 {
             Registry registry = LocateRegistry.createRegistry(25001);
              
             // Crea un nuevo servicio y lo registra en el repositorio
-            registry.rebind("miMensaje", new clientImpl());
+            registry.rebind("SERVER2", new clientImpl());
         } catch (Exception e) {
             e.printStackTrace();
         }      
-        System.out.println("El sistema esta listo");
+        System.out.println("Server 2 up and running");
     }
 
     public static void main(String[] args) {

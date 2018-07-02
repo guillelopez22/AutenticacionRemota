@@ -20,11 +20,11 @@ public class Coordinator {
             Registry registry = LocateRegistry.createRegistry(25002);
              
             // Crea un nuevo servicio y lo registra en el repositorio
-            registry.rebind("miMensaje", new clientImpl());
+            registry.rebind("COORDINATOR", new clientImpl());
         } catch (Exception e) {
             e.printStackTrace();
         }      
-        System.out.println("El sistema esta listo");
+        System.out.println("Coordinador listo");
     }
 
     public static void main(String[] args) {

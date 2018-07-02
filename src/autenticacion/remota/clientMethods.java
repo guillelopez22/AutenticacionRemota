@@ -15,7 +15,7 @@ import java.util.UUID;
  * @author guill
  */
 public interface clientMethods extends Remote{
-    String auth(Usuario usuario) throws RemoteException;
+    UUID auth(Usuario usuario) throws RemoteException;
     void registrar(Usuario usuario) throws RemoteException;
     Usuario lookUpUserUUID (UUID uuid) throws RemoteException;
     Usuario lookUpUserByUSERNAME (String username) throws RemoteException;

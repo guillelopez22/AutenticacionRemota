@@ -5,6 +5,7 @@
  */
 package autenticacion.remota;
 
+import java.net.InetAddress;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
@@ -20,11 +21,11 @@ public class Server1 {
             Registry registry = LocateRegistry.createRegistry(25000);
              
             // Crea un nuevo servicio y lo registra en el repositorio
-            registry.rebind("miMensaje", new clientImpl());
+            registry.rebind("SERVER1", new clientImpl());
         } catch (Exception e) {
             e.printStackTrace();
         }      
-        System.out.println("El sistema esta listo");
+        System.out.println("Server up and listening");
     }
 
     public static void main(String[] args) {

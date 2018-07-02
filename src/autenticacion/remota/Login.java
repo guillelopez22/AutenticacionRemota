@@ -14,12 +14,17 @@ import static com.mongodb.client.model.Filters.and;
 import static com.mongodb.client.model.Filters.eq;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.net.UnknownHostException;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.bson.Document;
@@ -33,10 +38,11 @@ public class Login extends javax.swing.JFrame {
     /**
      * Creates new form Login
      */
-    public Login() {
+    public Login() throws RemoteException, NotBoundException, UnknownHostException {
         initComponents();
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         jd_register.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
+        cliente.run();
 
     }
 
@@ -392,66 +398,76 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4MouseClicked
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
-        // TODO add your handling code here:
-        System.out.println("currently testing..");
-        Random r = new Random();
-        int port = r.nextInt(25001 - 25000) + 25000;
-        String[] args = new String[3];
-        args[0] = Integer.toString(port);
-        args[1] = tf_user.getText();
-        args[2] = encrypt(tf_password.getText());
+        try {
+            // TODO add your handling code here:
 
-        System.out.println(port);
-        String uuid = null;;
-        uuid = Coordinador.main(args);
-        System.out.println(uuid);
-        DefaultTableModel model = new DefaultTableModel();
-        String[] columnNames = {"Nombre", "Username", "Fecha Creacion", "FechaAcceso"};
-        for (int i = 0; i < columnNames.length; i++) {
-            model.addColumn(columnNames[i]);
+//        System.out.println("currently testing..");
+//        Random r = new Random();
+//        int port = r.nextInt(25001 - 25000) + 25000;
+//        String[] args = new String[3];
+//        args[0] = Integer.toString(port);
+//        args[1] = tf_user.getText();
+//        args[2] = encrypt(tf_password.getText());
+//
+//        System.out.println(port);
+//        String uuid = null;;
+//        uuid = Coordinador.main(args);
+//        System.out.println(uuid);
+//        DefaultTableModel model = new DefaultTableModel();
+//        String[] columnNames = {"Nombre", "Username", "Fecha Creacion", "FechaAcceso"};
+//        for (int i = 0; i < columnNames.length; i++) {
+//            model.addColumn(columnNames[i]);
+//        }
+//        MongoCursor<Document> cursor = users.find().iterator();
+//        Document doc;
+//        String nombre, username, fecha_c, fecha_a;
+//        while(cursor.hasNext()){
+//            doc = cursor.next();
+//            nombre = (String) doc.get("nombre");
+//            System.out.println(nombre);
+//            username = (String) doc.get("username");
+//            System.out.println(username);
+//            fecha_c = (String) doc.get("fecha_creacion");
+//            System.out.println(fecha_c);
+//            fecha_a = (String) doc.get("ultimo acceso");
+//            System.out.println(fecha_a);
+//            model.addRow(new Object[]{nombre, username, fecha_c, fecha_a});
+//        }
+//        jt_users.setModel(model);
+//        if (!uuid.equals("ERR")) {
+//            jd_clente.setModal(true);
+//            jd_clente.pack();
+//            jd_clente.setVisible(true);
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Las credenciales no son correctas");
+//        }
+//        tf_user.setText("");
+//        tf_password.setText("");
+            String username = tf_user.getText();
+            String pass = tf_password.getText();
+            Usuario user = new Usuario(username, pass);
+            UUID uuid = cliente.coordinator.auth(user);
+            JOptionPane.showMessageDialog(this, uuid.toString());
+        } catch (RemoteException ex) {
+            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
         }
-        MongoCursor<Document> cursor = users.find().iterator();
-        Document doc;
-        String nombre, username, fecha_c, fecha_a;
-        while(cursor.hasNext()){
-            doc = cursor.next();
-            nombre = (String) doc.get("nombre");
-            System.out.println(nombre);
-            username = (String) doc.get("username");
-            System.out.println(username);
-            fecha_c = (String) doc.get("fecha_creacion");
-            System.out.println(fecha_c);
-            fecha_a = (String) doc.get("ultimo acceso");
-            System.out.println(fecha_a);
-            model.addRow(new Object[]{nombre, username, fecha_c, fecha_a});
-        }
-        jt_users.setModel(model);
-        if (!uuid.equals("ERR")) {
-            jd_clente.setModal(true);
-            jd_clente.pack();
-            jd_clente.setVisible(true);
-        } else {
-            JOptionPane.showMessageDialog(this, "Las credenciales no son correctas");
-        }
-        tf_user.setText("");
-        tf_password.setText("");
 
 
     }//GEN-LAST:event_jButton1MouseClicked
 
     private void jButton8MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton8MouseClicked
         // TODO add your handling code here:
-        
+
         Document doc = users.find(eq("UUID", tf_UUID.getText())).first();
         System.out.println(tf_UUID.getText());
         String UUID = "ERR";
         UUID = doc.get("UUID").toString();
-        if(!UUID.equals("ERR")){            
-            JOptionPane.showMessageDialog(this,UUID );
-        }else{
-            JOptionPane.showMessageDialog(this,"No existe UUID");
+        if (!UUID.equals("ERR")) {
+            JOptionPane.showMessageDialog(this, UUID);
+        } else {
+            JOptionPane.showMessageDialog(this, "No existe UUID");
         }
-        
+
     }//GEN-LAST:event_jButton8MouseClicked
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
@@ -465,7 +481,7 @@ public class Login extends javax.swing.JFrame {
         Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         jd_lookup.setLocation(dim.width / 2 - this.getSize().width / 2, dim.height / 2 - this.getSize().height / 2);
         jd_lookup.setVisible(true);
-        
+
     }//GEN-LAST:event_jButton5MouseClicked
 
     private void jButton9MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton9MouseClicked
@@ -475,7 +491,7 @@ public class Login extends javax.swing.JFrame {
         String USER = "ERR";
         USER = doc.get("username").toString();
         if (!USER.equals("ERR")) {
-            JOptionPane.showMessageDialog(this, doc.get("UUID")+", "+doc.get("nombre")+", "+doc.get("username"));
+            JOptionPane.showMessageDialog(this, doc.get("UUID") + ", " + doc.get("nombre") + ", " + doc.get("username"));
         }
     }//GEN-LAST:event_jButton9MouseClicked
 
@@ -509,7 +525,15 @@ public class Login extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new Login().setVisible(true);
+                try {
+                    new Login().setVisible(true);
+                } catch (RemoteException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (NotBoundException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (UnknownHostException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
     }
@@ -571,4 +595,5 @@ public class Login extends javax.swing.JFrame {
     MongoClient client = new MongoClient(uri);
     MongoDatabase db = client.getDatabase(uri.getDatabase());
     MongoCollection<Document> users = db.getCollection("users");
+    Cliente cliente = new Cliente();
 }
