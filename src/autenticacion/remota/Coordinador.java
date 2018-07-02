@@ -1,0 +1,76 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package autenticacion.remota;
+
+/**
+ *
+ * @author Guillermo
+ */
+import com.mongodb.BasicDBObject;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
+import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoCursor;
+import com.mongodb.client.MongoDatabase;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+import org.bson.Document;
+
+public class Coordinador {
+
+    private static Socket socket;
+
+    public static void main(String args[]) {
+        try {
+            String UUID = "ERR";
+            String username = "memoln", password = "202cb962ac5975b964b7152d234b70";
+            String host = "localhost";
+            String message = "";
+            int port = 25000;
+            InetAddress address = InetAddress.getByName(host);
+            socket = new Socket(address, port);
+            //Send the message to the server
+            message = username + "," + password;
+            System.out.println(message);
+
+            OutputStream os = socket.getOutputStream();
+            OutputStreamWriter osw = new OutputStreamWriter(os);
+            BufferedWriter bw = new BufferedWriter(osw);
+            String sendMessage = message;
+            bw.write(sendMessage);
+            bw.flush();
+            System.out.println("Message sent to the server : " + sendMessage);
+            //Get the return message from the server
+            InputStream is = socket.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            if (br.ready()) {
+                System.out.println("asd");
+            }
+            
+
+        } catch (Exception exception) {
+            exception.printStackTrace();
+        } finally {
+            //Closing the socket
+            try {
+                socket.close();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+}
