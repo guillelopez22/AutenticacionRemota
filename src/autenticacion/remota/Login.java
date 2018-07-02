@@ -5,20 +5,17 @@
  */
 package autenticacion.remota;
 
-import com.mongodb.BasicDBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 import javax.swing.JOptionPane;
 import org.bson.Document;
@@ -237,7 +234,7 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         String date = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
         Usuario user = new Usuario(UUID.randomUUID(),tf_primer_nombre.getText(),tf_segundo_nombre.getText(),tf_username.getText(),encrypt(tf_regpassword.getText()), date);
-        Document document = new Document("User", user.getUuid())
+        Document document = new Document("UUID", user.getUuid())
                 .append("nombre",user.getPrimer_nombre()+" "+user.getSegundo_nombre())
                 .append("username", user.getUsername())
                 .append("password", user.getPassword())
@@ -258,23 +255,18 @@ public class Login extends javax.swing.JFrame {
 
     private void jButton1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseClicked
         // TODO add your handling code here:
-        BasicDBObject andQuery = new BasicDBObject();
-	List<BasicDBObject> obj = new ArrayList<BasicDBObject>();
-	obj.add(new BasicDBObject("username", "memoln"));
-	obj.add(new BasicDBObject("password", encrypt(tf_password.getText())));
-	andQuery.put("$and", obj);
-
-	MongoCursor<Document> cursor = users.find(andQuery).iterator();
-        Document doc = null;
-	while (cursor.hasNext()) {
-            doc = cursor.next();
-	}
-        if (doc == null) {
-                JOptionPane.showMessageDialog(this, "El usuario y/o contrasena no es correcto");
-        }else if (doc.get("username").equals(tf_user.getText()) && doc.get("password").equals(encrypt(tf_password.getText()))) {
-                JOptionPane.showMessageDialog(this, "Bienvenido "+ doc.get("UUID"));
-        }
-   
+        System.out.println("currently testing..");
+        Random r = new Random();
+        int port = r.nextInt(25001-25000) + 25000;
+        String[] args = new String[3];
+        args[0] = Integer.toString(port);
+        args[1] = tf_user.getText();
+        args[2] = encrypt(tf_password.getText());
+        
+        System.out.println(port);
+        String uuid = Coordinador.main(args);
+        System.out.println(uuid);
+        
         tf_user.setText("");
         tf_password.setText("");
         

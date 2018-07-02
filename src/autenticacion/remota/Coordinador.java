@@ -32,13 +32,14 @@ import org.bson.Document;
 public class Coordinador {
 
     private static Socket socket;
+    public static String Rmessage;
 
-    public static void main(String args[]) {
+    public static String main(String args[]) {
         try {
-            String username = "memoln", password = "202cb962ac5975b964b7152d234b70";
+            String username = args[1], password = args[2];
             String host = "localhost";
             String message = "";
-            int port = 25000;
+            int port = Integer.parseInt(args[0]);
             InetAddress address = InetAddress.getByName(host);
             socket = new Socket(address, port);
             //Send the message to the server
@@ -56,7 +57,7 @@ public class Coordinador {
             InputStream is = socket.getInputStream();
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);
-            String Rmessage = br.readLine();
+            Rmessage = br.readLine();
             System.out.println("Received: "+Rmessage);
 
         } catch (Exception exception) {
@@ -70,6 +71,6 @@ public class Coordinador {
                 e.printStackTrace();
             }
         }
-
+        return Rmessage;
     }
 }
