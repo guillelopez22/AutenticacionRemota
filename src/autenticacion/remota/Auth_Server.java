@@ -10,11 +10,15 @@ package autenticacion.remota;
  * @author Guillermo
  */
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
+import com.mongodb.MongoClientOptions;
 import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
+import static com.mongodb.client.model.Filters.and;
+import static com.mongodb.client.model.Filters.eq;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -22,9 +26,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,15 +38,12 @@ import org.bson.Document;
 public class Auth_Server {
 
     private static Socket socket;
-    private static Queue<String> credentials = new LinkedList<>();
-    private static MongoClientURI uri = new MongoClientURI("mongodb://admin:admin123@ds123151.mlab.com:23151/remote_auth");
-    private static MongoClient client = new MongoClient(uri);
-    private static MongoDatabase db = client.getDatabase(uri.getDatabase());
-    private static MongoCollection<Document> users = db.getCollection("users");
+    private static final Queue<String> credentials = new LinkedList<>();
+
+    private static String username = "", password = "", message;
 
     public static void main(String[] args) {
         try {
-
             int port = 25000;
             ServerSocket serverSocket = new ServerSocket(port);
             System.out.println("Server Started and listening to the port 25000");
@@ -51,51 +52,32 @@ public class Auth_Server {
             while (true) {
                 //Reading the message from the client
                 socket = serverSocket.accept();
-                String username = "", password = "";
+
                 InputStream is = socket.getInputStream();
                 InputStreamReader isr = new InputStreamReader(is);
                 BufferedReader br = new BufferedReader(isr);
-                String message = br.readLine();
+                message = br.readLine();
+                System.out.println("received message: " + message);
                 credentials.add(message);
-
-                try {
-                    //Send the message to the server
-                    System.out.println("Processing Authentication....");
-                    String[] cred = credentials.poll().split(",");
-                    username = cred[0];
-                    password = cred[1];
-                    BasicDBObject andQuery = new BasicDBObject();
-                    List<BasicDBObject> obj = new ArrayList<BasicDBObject>();
-                    obj.add(new BasicDBObject("username", username));
-                    obj.add(new BasicDBObject("password", password));
-                    andQuery.put("$and", obj);
-                    OutputStream os = socket.getOutputStream();
-                    OutputStreamWriter osw = new OutputStreamWriter(os);
-                    BufferedWriter bw = new BufferedWriter(osw);
-                    MongoCursor<Document> cursor = users.find(andQuery).iterator();
-                    String sendMessage = "";
-                    Document doc = null;
-                    while (cursor.hasNext()) {
-                        doc = cursor.next();
-                    }
-                    if (doc == null) {
-                        sendMessage = "Error en la credenciales, porfavor verifique de nuevo";
-                    } else if (doc.get("username").equals(username) && doc.get("password").equals(password)) {
-                        sendMessage = doc.get("UUID").toString();
-                    }
-
-                    bw.write(sendMessage);
-                    System.out.println("asd");
-                    if (bw != null) {
-                        System.out.println("si hay");
-                        bw.flush();
-                    }else{
-                        System.out.println("no hay nada");
-                    }
-                    System.out.println("Message sent to the server : " + sendMessage);
-
-                } catch (IOException exception) {
+                //Send the message to the server
+                System.out.println("Processing Authentication....");
+                String[] cred = credentials.poll().split(",");
+                username = cred[0];
+                password = cred[1];
+                String sendMessage = auth(message);
+                OutputStream os = socket.getOutputStream();
+                OutputStreamWriter osw = new OutputStreamWriter(os);
+                BufferedWriter bw = new BufferedWriter(osw);
+                bw.write(sendMessage);
+                bw.newLine();
+                bw.flush();
+                if (bw != null) {
+                    System.out.println("si hay");
+                } else {
+                    System.out.println("no hay nada");
                 }
+                System.out.println("Message sent to the server : " + sendMessage);
+
             }
         } catch (IOException e) {
         } finally {
@@ -104,6 +86,20 @@ public class Auth_Server {
             } catch (IOException e) {
             }
         }
+    }
+
+    public static String auth(String message) throws SocketException {
+        MongoClientURI uri = new MongoClientURI("mongodb://admin:admin123@ds123151.mlab.com:23151/remote_auth");
+        MongoClient client = new MongoClient(uri);
+        MongoDatabase db = client.getDatabase(uri.getDatabase());
+        MongoCollection<Document> users = db.getCollection("users");
+        Document doc = users.find(and(eq("username", username), (eq("password", password)))).first();
+        if (doc.get("username").equals(username) && doc.get("password").equals(password)) {
+            message = doc.get("UUID").toString();
+        }
+        
+        return message;
+
     }
 }
 //public static void main(String[] args)

@@ -35,7 +35,6 @@ public class Coordinador {
 
     public static void main(String args[]) {
         try {
-            String UUID = "ERR";
             String username = "memoln", password = "202cb962ac5975b964b7152d234b70";
             String host = "localhost";
             String message = "";
@@ -43,24 +42,22 @@ public class Coordinador {
             InetAddress address = InetAddress.getByName(host);
             socket = new Socket(address, port);
             //Send the message to the server
-            message = username + "," + password;
+            message = username + "," + password + "\n";
             System.out.println(message);
 
             OutputStream os = socket.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(os);
             BufferedWriter bw = new BufferedWriter(osw);
-            String sendMessage = message;
-            bw.write(sendMessage);
+            bw.write(message);
             bw.flush();
-            System.out.println("Message sent to the server : " + sendMessage);
+            System.out.println("Message sent to the server : " + message);
+
             //Get the return message from the server
             InputStream is = socket.getInputStream();
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader br = new BufferedReader(isr);
-            if (br.ready()) {
-                System.out.println("asd");
-            }
-            
+            String Rmessage = br.readLine();
+            System.out.println("Received: "+Rmessage);
 
         } catch (Exception exception) {
             exception.printStackTrace();
@@ -68,9 +65,11 @@ public class Coordinador {
             //Closing the socket
             try {
                 socket.close();
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
+
     }
 }
